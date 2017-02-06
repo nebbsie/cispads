@@ -1,6 +1,6 @@
-# cispads
+# CISPADS - Contruction and Industry Scheme Payment and Deduction Statements
 Web application to create the Construction Industry Scheme Payment and Deduction Statement tax document.
-Currently in development but will be deployed for all to use soon.
+Currently users cannot create an account, to create an account please email aaron@nebbs.com for more information.
 
 http://cispads.com/
 
@@ -10,5 +10,9 @@ http://cispads.com/
 - Save subcontractors
 - View all contractors
 - Create a document and save
-- View all documents
+- View all previous tax documents
 - Send the document to the subcontractors email
+
+
+## Built With
+- PHPEmailer - The emailing library used.
