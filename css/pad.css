@@ -1,0 +1,49 @@
+*{
+	padding: 0px;
+	margin: 0px;
+        
+
+}
+
+body{
+	background-color: yellow;
+}
+
+div.box{
+	border: 1px solid black;
+	width: 700px;
+	height: 350px;
+}
+
+div.textBox{
+	border: 1px solid black;
+	width: 250px;
+	height: 25px;
+	margin-left: 25px;
+}
+
+div.left{
+	width: 350px;
+	float: left;
+}
+
+div.right{
+	width: 350px;
+	float: right;
+}
+
+p.innerBox{
+	margin-left: 10px;
+}
+
+div.hr{
+	height: 25px;
+	background-color: black;
+	margin-bottom: 25px;
+}
+
+div.center{
+	 margin: auto;
+    width: 50%;
+    text-align: center;
+}	
