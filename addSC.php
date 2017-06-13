@@ -19,21 +19,10 @@
   		<h1 style="padding-left: 20px;">CIS PADS<small>    Add new Sub Contractor</small></h1>
 </div>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-60335399-2', 'auto');
-  ga('send', 'pageview');
-
-</script>
-
 
 <div class="center">
 
-		<form action="userpage">
+		<form action="userpage.php">
 				<button class="btn btn-primary btn-lg" style=" font-size: 150%; text-align: center;" type="submit"  class="btn btn-default">Go Back</button>
 		</form>
 

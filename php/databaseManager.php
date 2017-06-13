@@ -1,29 +1,34 @@
-<?php 
+<?php
 session_start();
 include "connect.php";
+require "objects/User.php";
 
 checkPOSTMethod($conn);
 
 /*
-* Function that controlls the POST method
+* Function that controls the POST method
 * @param (conn) the connection object
 */
 function checkPOSTMethod($conn){
+
+    echo "here";
+
 	if (isset ($_POST['search'])) {
 		searchUser($_POST['searchName'], $conn);
-	} 
+	}
 	else if (isset($_POST['create'])) {
 		createUser($_POST['username'], $_POST['password'], $conn);
-	} 
+	}
 	else if (isset($_POST['viewAll'])) {
 		getAllUsers($conn);
 	}
 	else if (isset($_POST['login'])){
-		userLogin($_POST['username'], $_POST['password'], $conn);	
+        echo "here2";
+		userLogin($_POST['username'], $_POST['password'], $conn);
 	}
 	else if (isset($_POST['selectDelete'])){
 		$id = $_POST['deleteVal'];
-		deleteUserByID($id, $conn);
+		deleteSCByID($id, $conn);
 	}
 	else if (isset($_POST['user-logout'])){
 		logoutUser($conn);
@@ -43,7 +48,7 @@ function searchUser($iUsername, $conn) {
 	if($result->num_rows > 0) {
 		echo "Found User";
 	} else {
-		echo "User Not Found"; 
+		echo "User Not Found";
 	}
 	endConnection($conn);
 }
@@ -64,15 +69,6 @@ function checkIfUserExists($iUsername, $conn){
 	}
 	endConnection($conn);
 }
-
-
-/* DOM THIS NEEDS TO BE UPDATED TO WORK WITH THE NEW DATABASE
-
-needs to insert the lastlogged in date, username, password, firstname, lastname
-and also needs to give the generated userID and the profilepic!
-
-*/
-
 
 /*
 * Function creates a new user with the given data
@@ -105,7 +101,7 @@ function getAllUsers($conn){
 
 	if($result->num_rows > 0) {
 		echo "Results Found: " . $result->num_rows . "<br> <hr>";
-		
+
 		while($row = $result->fetch_assoc()) {
 			echo "ID: " . $row['userID'] . " <br>   Username: " . $row['username'] . " <br>   Password: " . $row['password'] . " <hr>";
 		}
@@ -145,22 +141,23 @@ function getSCByID($id ,$conn){
 function userLogin($username, $password, $conn){
 	$sqlLogin = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
 	$result = $conn->query($sqlLogin);
-
+    echo "here";
 	if($result->num_rows > 0) {
 		saveToSession($result);
-		$id = $_SESSION['user-id'];
-		$id = intval($id);
-		$times =  $_SESSION['times'];
+		$user = unserialize($_SESSION['user']);
+		$id = intval($user->userID);
+		$times =  $user->times;
 		$times = intval($times);
 		$times = $times + 1;
 
 		$sqlUpdateSC = "UPDATE users SET timesUsed=$times  WHERE id = $id ";
+
 		if ($conn->query($sqlUpdateSC) === TRUE) {
 		} else {
 			echo "Error updating record: " . mysqli_error($conn);
 		}
 
-		header('Location: ' . "../userpage");
+		header('Location: ' . "../userpage.php");
 	} else {
 		$_SESSION["failed"] = "true";
 		header('Location: ' . "../");
@@ -186,16 +183,18 @@ function endConnection($conn) {
 }
 
 
+
 function saveToSession($result){
 	session_unset();
 	while($row = $result->fetch_assoc()) {
-		$_SESSION["user-id"] = $row['id'];
-		$_SESSION["username"] = $row['username'];
-		$_SESSION["password"] = $row['password'];
-		$_SESSION["fname"] = $row['fname'];
-		$_SESSION["lname"] = $row['lname'];
-		$_SESSION["times"] = $row['timesUsed'];
-		$_SESSION["pdfs"] = $row['pdfs'];
+	    $user = new User();
+	    $user->fName = $row['fname'];
+	    $user->lName = $row['lname'];
+	    $user->userID = $row['id'];
+	    $user->username = $row['username'];
+	    $user->password = $row['password'];
+	    $user->times = $row['timesUsed'];
+	    $user->PDF = $row['pdfs'];
+	    $_SESSION['user'] = serialize($user);
 	}
 }
-?>

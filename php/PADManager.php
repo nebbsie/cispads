@@ -1,6 +1,7 @@
 <?php 
 session_start();
 include "connect.php";
+require "objects/User.php";
 
 checkPOSTMethod($conn);
 
@@ -50,7 +51,12 @@ function deletePADByID($id ,$conn){
 
 
 function getAllPads($conn){
-	$id = $_SESSION["user-id"];
+
+    $user = $_SESSION['user'];
+    $u = unserialize($user);
+
+	$id = $u->userID;
+
 	if($id == 0){
 		$sqlgetAllPads = "SELECT * FROM pad";
 	}else{
@@ -58,14 +64,16 @@ function getAllPads($conn){
 	}
 	
 	$result = $conn->query($sqlgetAllPads);
-
-		$array = array();
+    $array = array();
 
 	if($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
 			$array[] = $row;
+			echo $row;
 		}
+
 		$_SESSION["result-pads"] = $array;
+		var_dump($array);
 
 		return;		
 	} else {
@@ -134,10 +142,12 @@ function createPad($conn, $id, $date, $gross, $materials){
  	$amountDeducted = intval($amountDeducted);
  	$amountPayable = intval($amountPayable);
  	$isHigher = intval($isHigher);
- 	$email = $_SESSION["pad-email"];
 
+ 	$user = unserialize($_SESSION['user']);
+
+ 	$email = $_SESSION["pad-email"];
 	$name = $_SESSION['pad-name'];
-	$userID = $_SESSION["user-id"];
+	$userID = $user->userID;
 
 	$sqlCreatePad = "
 	INSERT INTO pad
@@ -161,7 +171,7 @@ function createPad($conn, $id, $date, $gross, $materials){
     	$_SESSION["pad-isHigher"] = $isHigher;
     	$_SESSION["pad-email"] = $email;
 
-    	header('Location: ' . "../padViewer");
+    	header('Location: ' . "../padViewer.php");
 	} else {
     	echo "Error: " . $sql . "<br>" . $conn->error;
 	}

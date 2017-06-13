@@ -25,3 +25,7 @@ h1.loginTitle{
 	top:0px; 
 	z-index:100 
 }
+
+body{
+	height:100%;
+}
